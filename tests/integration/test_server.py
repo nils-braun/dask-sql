@@ -1,6 +1,7 @@
 from time import sleep
 
 import pytest
+from dask.distributed import Client
 from fastapi.testclient import TestClient
 
 from dask_sql.server.app import _init_app, app
@@ -8,7 +9,7 @@ from dask_sql.server.app import _init_app, app
 
 @pytest.fixture(scope="module")
 def app_client():
-    _init_app(app)
+    _init_app(app, client=Client.current() or Client())
 
     yield TestClient(app)
 
